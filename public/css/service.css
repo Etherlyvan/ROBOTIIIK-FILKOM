@@ -1,0 +1,37 @@
+.outer3 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.outer2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.35));
+    border: none;
+    padding: 20px;
+    cursor: pointer;
+    text-align: center;
+    width: 499px;
+    height: 737px;
+    padding: 63px 45px 63px 45px;
+    gap: 29px;
+    border-radius: 50px;
+}
+
+.outer2 img {
+    width: 409px;
+    height: 322px;
+    border-radius: 50px;
+    filter: grayscale(100%);
+}
+
+.paragrafService {
+    font-family: Oxanium;
+    text-align: center;
+    color: white;
+    line-height: 25px;
+    font-weight: 400;
+    font-size: 20px;
+}
