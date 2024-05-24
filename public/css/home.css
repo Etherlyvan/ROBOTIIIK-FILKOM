@@ -8,7 +8,23 @@
     background-image: url(HomepageRobotiik.svg);
     background-size: cover;
 }
-
+.defaultpage-robotiik{
+    display: flex;
+    width: 100%;
+    padding-top: 35px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    background-image: url(Wp_Service.svg);
+    background-size: cover;
+}
+.defaultpage-robotiik .homepage-res {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 49px;
+}
 .homepage-robotiik .homepage-res {
     display: flex;
     width: 100%;
