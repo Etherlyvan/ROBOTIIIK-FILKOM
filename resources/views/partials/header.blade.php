@@ -1,6 +1,7 @@
 <nav class="navbar">
     <img class="logo" src="{{URL::to('img/logo.png')}}" />
     <li class="div-nav">
+    <a class="{{$title === 'Login' ? 'menus' : 'menu'}}" href="/login">Login</a>
         <a class="{{$title === 'Home' ? 'menus' : 'menu'}}" href="/">Home</a>
         <a class="{{$title === 'Division' ? 'menus' : 'menu'}}" href="/division">Division</a>
         <a class="{{$title === 'Relation' ? 'menus' : 'menu'}}" href="/relation">Relation</a>
