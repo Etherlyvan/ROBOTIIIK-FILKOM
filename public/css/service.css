@@ -34,7 +34,7 @@
     width: 499px;
     height: 737px;
     padding: 63px 45px 63px 45px;
-    gap: 29px;
+    gap: 39px;
     border-radius: 50px;
 }
 
@@ -52,4 +52,7 @@
     line-height: 25px;
     font-weight: 400;
     font-size: 20px;
+}
+.outer2:hover {
+    scale: 1.01;
 }
