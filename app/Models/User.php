@@ -24,6 +24,9 @@ class User extends Authenticatable
     // ];
     
     protected $guarded = ['id'];
+    protected $attributes = [
+        'is_admin' => false, // Optional: This ensures the default value at the model level
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *

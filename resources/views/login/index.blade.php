@@ -8,15 +8,15 @@
 
 @if (session()->has('success'))
   <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>{{ session('success') }}</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <strong>{{ session('success') }}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 @endif
 
 @if (session()->has('loginError'))
   <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <strong>{{ session('loginError') }}</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <strong>{{ session('loginError') }}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 @endif
 
@@ -27,14 +27,16 @@
     @csrf
     <h1>Login</h1>
     <div class="input-box">
-      <input type="email" name="email" id="email" placeholder="Email" autofocus class="@error('email') is-invalid @enderror" required>
+      <input type="text" name="login" id="login" placeholder="Email or Username" autofocus
+        class="@error('login') is-invalid @enderror" required>
       <i class='bx bxs-user'></i>
-      @error('email')
-      <div class="invalid-feedback">
-        {{ $message }}
-      </div>
-      @enderror
+      @error('login')
+    <div class="invalid-feedback">
+      {{ $message }}
     </div>
+  @enderror
+    </div>
+
     <div class="input-box">
       <input type="password" name="password" id="password" placeholder="Password" required>
       <i class='bx bxs-lock-alt'></i>

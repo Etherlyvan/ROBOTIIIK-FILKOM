@@ -7,23 +7,43 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('login.index', [
             "title" => "Login"
         ]);
     }
 
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
+        // Validasi input dari pengguna
         $credentials = $request->validate([
-            'email' => 'required|email:dns',
-            'password' => 'required'
+            'login' => 'required|string',
+            'password' => 'required|string'
         ]);
 
-        if (Auth::attempt($credentials)) {
+        // Tentukan apakah input adalah email atau username
+        $loginField = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // Siapkan kredensial untuk autentikasi
+        $authCredentials = [
+            $loginField => $credentials['login'],
+            'password' => $credentials['password'],
+        ];
+
+        // Mencoba untuk mengautentikasi pengguna dengan kredensial yang diberikan
+        if (Auth::attempt($authCredentials)) {
+            // Jika autentikasi berhasil, regenerasi sesi untuk keamanan
             $request->session()->regenerate();
+
+            // Redirect pengguna ke halaman yang diinginkan (default ke '/')
             return redirect()->intended('/');
         }
-        
-        return back()->with('loginError', 'Login failed');
+
+        // Jika autentikasi gagal, kembalikan ke halaman login dengan pesan kesalahan
+        return back()->withErrors([
+            'loginError' => 'Login failed'
+        ])->onlyInput('login');
     }
+
 }
