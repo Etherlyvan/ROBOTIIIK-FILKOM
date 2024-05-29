@@ -1,0 +1,56 @@
+/* General styling */
+body {
+    font-family: Oxanium;
+    color: white;
+    box-sizing: border-box;
+}
+
+/* Container styling */
+.palingLuar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Oxanium;
+    margin-top: -100px;
+}
+.outer1{
+    display: flex;  /* Menjadikan outer1 sebagai flex container */
+    flex-direction: row;  /* Membuat inner1 dan inner2 tampil berdampingan */
+    justify-content: space-between;  /* Memberikan ruang antara inner1 dan inner2 */
+    width: 100%; 
+}
+.inner1{
+    width: 556px;
+    height: 384px;
+    display: flex;  /* Menambahkan flex display */
+    flex-direction: column; 
+}
+.inti1 h1{
+    font-size: 96px;
+    font-weight: bold;
+}
+.inti2{
+    flex-direction: column;
+    gap: 25px;
+}
+
+.inti2 button{
+    width: 258px;
+    height: 76px;
+    border-radius: 20px;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: Oxanium;
+}
+.button1{
+    background-color: #3BDCF6;
+    color: #ffff;
+}
+.button2{
+    background-color: #ffff;
+    color: #070247;
+    margin-left: 25px;
+}
+.outer1 img{
+    
+}

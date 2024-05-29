@@ -34,7 +34,7 @@
     <div class="invalid-feedback">
       {{ $message }}
     </div>
-  @enderror
+    @enderror
     </div>
 
     <div class="input-box">

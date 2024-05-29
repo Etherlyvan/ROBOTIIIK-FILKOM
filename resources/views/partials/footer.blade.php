@@ -1,5 +1,5 @@
 <footer class="footer">
-    <img class="robotikk-4" src="img/logowarna.svg" />
+    <img class="robotikk-4" src="/img/logowarna.svg" />
     <div class="f-kanan">
         <div class="frame33">
             <div class="text33">Sekretariat</div>

@@ -37,13 +37,30 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             // Redirect pengguna ke halaman yang diinginkan (default ke '/')
-            return redirect()->intended('/');
+            if (Auth::user()->is_admin) {
+                return redirect()->route('admin');
+            } else {
+                return redirect()->route('dashboard');
+            }
         }
 
         // Jika autentikasi gagal, kembalikan ke halaman login dengan pesan kesalahan
         return back()->withErrors([
             'loginError' => 'Login failed'
         ])->onlyInput('login');
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+    public function admin(){
+        return view('admin.index',['title'=>'Admin']);
     }
 
 }

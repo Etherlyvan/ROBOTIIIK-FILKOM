@@ -1,9 +1,6 @@
 <nav class="navbar">
-    <img class="logo" src="{{URL::to('img/logo.png')}}" />
+    <a href="/"><img class="logo" src="{{URL::to('img/logo.png')}}" /></a>
     <ul class="div-nav">
-        <li>
-            <a class="{{$title === 'Login' ? 'menus' : 'menu'}}" href="/login">Login</a>
-        </li>
         <li>
             <a class="{{$title === 'Home' ? 'menus' : 'menu'}}" href="/">Home</a>
         </li>
