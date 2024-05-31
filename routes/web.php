@@ -7,6 +7,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\RedirectAdminFromDashboard;
 use App\Http\Controllers\OrderPrintController;
+use App\Http\Controllers\AdminPostController;
+use App\Http\Controllers\UserOrderController;
 
 Route::get('/', function () {
     return view('home', ["title"=>"Home"]);
@@ -47,3 +49,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::post('/orderprint', [OrderPrintController::class, 'store'])->name('orderprint.store')->middleware('auth');
 Route::post('/orderdesign', [OrderDesignController::class, 'store'])->name('orderdesign.store')->middleware('auth');
+
+
+Route::get('/tampilkanorderdesign/ambildatatabeldesign', [AdminPostController::class, 'ambildatatabeldesign'])->name('tampilkanorderdesign.ambildatatabeldesign');
+Route::get('/tampilkanorderprint/ambildatatabelprint', [AdminPostController::class, 'ambildatatabelprint'])->name('tampilkanorderprint.ambildatatabelprint');
+
+Route::put('/update-design-status/{id_orderdesign}', [AdminPostController::class, 'updateDesignStatus']);
+Route::put('/update-print-status/{id_orderprint}', [AdminPostController::class, 'updatePrintStatus']);
+
+Route::get('/search', [AdminPostController::class, 'search']);
+
+Route::get('/order', [UserOrderController::class, 'index']);
+Route::get('/user/design', [UserOrderController::class, 'ambildatatabeldesign'])->name('user.design');
+Route::get('/user/print', [UserOrderController::class, 'ambildatatabelprint'])->name('user.print');

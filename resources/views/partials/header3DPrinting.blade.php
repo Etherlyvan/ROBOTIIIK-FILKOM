@@ -12,8 +12,12 @@
                 </li>
             @else
                 <li>
-                    <a class="{{$title === 'Register' ? 'menus' : 'menu'}}" href="/order">Order</a>
+                    <form action="/{{ $title === 'Order' || $title === "Print Orders" || $title === "Design Orders"? 'dashboard' : 'order' }}" method="get">
+                        <button type="submit"
+                            class="{{$title === 'Register' ? 'menus' : 'menu'}}">{{ $title === 'Order' || $title === "Print Orders" || $title === "Design Orders"? 'Dashboard' : 'Order' }}</button>
+                    </form>
                 </li>
+
                 <li>
                     <form action="/logout" method="post">
                         @csrf
