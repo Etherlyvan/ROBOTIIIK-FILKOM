@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('kontak');
             $table->string('file_name');
             $table->string('material');
-            $table->string('status')->default('queue');
+            $table->string('status')->default('waiting');
             $table->date('tanggal_pesan');
             $table->time('jam_pesan');
+            $table->string('file_resi')->nullable(); // Hapus klausa after
+            $table->string('harga')->default('0');
             $table->timestamps();
         });
 
@@ -31,9 +33,11 @@ return new class extends Migration
             $table->string('kontak');
             $table->text('penjelasan');
             $table->string('file_name');
-            $table->string('status')->default('queue');
+            $table->string('status')->default('waiting');
             $table->date('tanggal_pesan');
             $table->time('jam_pesan');
+            $table->string('file_resi')->nullable(); // Hapus klausa after
+            $table->string('harga')->default('0');
             $table->timestamps();
         });
     }
@@ -44,5 +48,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('tableorderprint');
+        Schema::dropIfExists('tableorderdesign');
     }
 };

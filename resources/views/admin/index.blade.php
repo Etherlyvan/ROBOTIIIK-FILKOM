@@ -74,47 +74,117 @@
                     <td>{{ $op->nama }}</td>
                     <td>{{ $op->material }}</td>
                     <td>{{ $op->kontak }}</td>
-                    <td>
-                        <select name="status" onchange="updateStatus('{{ $op->id_orderprint }}', this.value, 'print')">
-                            <option value="{{ $op->status }}" selected>{{ $op->status }}</option>
-                            <option value="Done" {{ $op->status == 'Done' ? 'selected' : '' }}>Done</option>
-                            <option value="Ditolak" {{ $op->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
-                            <option value="DPLunas" {{ $op->status == 'DPLunas' ? 'selected' : '' }}>DPLunas</option>
-                            <option value="Proses" {{ $op->status == 'Proses' ? 'selected' : '' }}>Proses</option>
-                        </select>
-                    </td>
+                    @if ($op->status == 'waiting')
+                        <td><button onclick="showPopup('viewOrder{{ $op->id_orderprint }}')">View order</button></td>
+                    @elseif($op->status == 'checking')
+                        <td><button onclick="showPopup('checkPayment{{ $op->id_orderprint }}')">Check Payment</button></td>
+                    @elseif($op->status == 'processing')
+                        <td>
+                            <form action="{{ url('/doneprinting/' . $op->id_orderprint) }}" method="post">
+                                @csrf
+                                <button type="submit">Done Printed</button>
+                            </form>
+                        </td>
+                    @elseif($op->status == 'ready to take')
+                        <td>
+                            <form action="{{ url('/finishorder/' . $op->id_orderprint) }}" method="post">
+                                @csrf
+                                <button type="submit">Finish Order</button>
+                            </form>
+                        </td>
+                    @else
+                        <td>{{ $op->status }}</td>
+                    @endif
                 </tr>
+
+                <!-- Popup for View Order -->
+                <div class="popupprintadmin" id="viewOrder{{ $op->id_orderprint }}" style="display: none;">
+                    <div>
+                        <h2>Accept Design</h2>
+                        <button onclick="closePopup('viewOrder{{ $op->id_orderprint }}')"><img class="logo"
+                                src="{{ asset('img/x.svg') }}" /></button>
+                    </div>
+                    <div>
+                        <h4>Kontak (WhatsApp/ Email)</h4>
+                        <div>
+                            <h4>{{ $op->kontak }}</h4>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Nama</h4>
+                        <div>
+                            <h4>{{ $op->nama }}</h4>
+                        </div>
+                    </div>
+                    <form id="acceptForm" action="{{ route('accept-print-admin', ['id' => $op->id_orderprint]) }}" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div>
+                            <h4>Harga</h4>
+                            <input type="text" name="harga">
+                        </div>
+                        <div class="downloadFile">
+                            <a href="{{ asset($op->file_name) }}" download>{{ $op->file_name }}</a>
+                        </div>
+                        <div>
+                            <button type="submit">Accept</button>
+                        </div>
+                    </form>
+                    <form id="declineForm" action="{{ route('decline-order', ['id' => $op->id_orderprint]) }}" method="post">
+                        @csrf
+                        <button type="submit"
+                            onclick="return confirm('Are you sure you want to decline this order?')">Decline</button>
+                    </form>
+                </div>
+
+                <!-- Popup for Check Payment -->
+                <div class="popupcheckpayment" id="checkPayment{{ $op->id_orderprint }}" style="display: none;">
+                    <div>
+                        <h2>Check Payment</h2>
+                        <button onclick="closePopup('checkPayment{{ $op->id_orderprint }}')"><img class="logo"
+                                src="{{ asset('img/x.svg') }}" /></button>
+                    </div>
+                    <div>
+                        <h4>Kontak (WhatsApp/ Email)</h4>
+                        <div>
+                            <h4>{{ $op->kontak }}</h4>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Nama</h4>
+                        <div>
+                            <h4>{{ $op->nama }}</h4>
+                        </div>
+                    </div>
+                    <form id="acceptForm" action="{{ route('accept-payment-admin', ['id' => $op->id_orderprint]) }}"
+                        method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div>
+                            <h4>Harga</h4>
+                            <div>
+                                <h4>{{ $op->harga }}</h4>
+                            </div>
+                        </div>
+                        <div class="downloadFile">
+                            <a href="{{ asset($op->file_name) }}" download>{{ $op->file_name }}</a>
+                            <a href="{{ asset($op->file_resi) }}" download>{{ $op->file_resi }}</a>
+                        </div>
+                        <div>
+                            <button type="submit">Accept</button>
+                        </div>
+                    </form>
+                    <form id="declineForm" action="{{ route('decline-order', ['id' => $op->id_orderprint]) }}" method="post">
+                        @csrf
+                        <button type="submit"
+                            onclick="return confirm('Are you sure you want to decline this order?')">Decline</button>
+                    </form>
+                </div>
             @endforeach
         @endif
     </tbody>
 </table>
 
 <script>
-    function updateStatus(id, status, type) {
-        let url = (type === 'design') ? `/update-design-status/${id}` : `/update-print-status/${id}`;
-
-        // Send Ajax request
-        fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ status: status })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to update status');
-                }
-                // Handle success or update UI as needed
-            })
-            .catch(error => {
-                console.error(error);
-                // Handle error or display error message
-            });
-    }
-
-
     document.addEventListener('DOMContentLoaded', (event) => {
         document.querySelectorAll('input[name="pilihan"]').forEach((elem) => {
             elem.addEventListener("change", function (event) {
@@ -127,5 +197,16 @@
             });
         });
     });
+
+    function showPopup(id) {
+        var popup = document.getElementById(id);
+        popup.style.display = "block";
+    }
+
+    function closePopup(id) {
+        var popup = document.getElementById(id);
+        popup.style.display = "none";
+    }
+
 </script>
 @endsection

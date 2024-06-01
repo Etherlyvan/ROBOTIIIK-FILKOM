@@ -25,6 +25,7 @@
         @include('partials.footer')
     </div>
 </body>
+
 <script>
     document.addEventListener("scroll", () => {
         const header = document.querySelector(".navbar");

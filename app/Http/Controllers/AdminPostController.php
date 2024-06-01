@@ -45,7 +45,7 @@ class AdminPostController extends Controller
     private function updateStatus(Request $request, $id, $model)
     {
         $status = $request->input('status');
-        
+
         try {
             $order = $model::find($id);
 
@@ -59,5 +59,55 @@ class AdminPostController extends Controller
             return response()->json(['message' => 'Failed to update status'], 500);
         }
     }
-    
+    public function acceptPrintAdmin(Request $request, $id)
+    {
+        // Validate the request
+        $request->validate([
+            'harga' => 'required|integer',
+        ]);
+
+        // Ambil nilai harga dari input form
+        $harga = $request->input('harga');
+
+        // Perbarui model TableOrderPrint dengan harga dan status yang baru
+        $order = TableOrderPrint::find($id);
+        $order->harga = $harga;
+        $order->status = 'payment'; // Ubah status menjadi "payment"
+        $order->save();
+
+        // Redirect kembali ke halaman pesanan admin
+        return redirect()->back()->with('success', 'Order confirmed successfully.');
+    }
+    public function acceptPaymentAdmin(Request $request, $id)
+    {
+
+        $order = TableOrderPrint::find($id);
+        if ($order) {
+            $order->status = 'processing';
+            $order->save();
+        }
+
+        return redirect()->back()->with('success', 'Status updated to ready to take.');
+    }
+    public function doneprinting(Request $request, $id)
+    {
+        $order = TableOrderPrint::find($id);
+        if ($order) {
+            $order->status = 'ready to take';
+            $order->save();
+        }
+
+        return redirect()->back()->with('success', 'Status updated to ready to take.');
+    }
+
+    public function finishorder(Request $request, $id)
+    {
+        $order = TableOrderPrint::find($id);
+        if ($order) {
+            $order->status = 'done';
+            $order->save();
+        }
+
+        return redirect()->back()->with('success', 'Order finished.');
+    }
 }

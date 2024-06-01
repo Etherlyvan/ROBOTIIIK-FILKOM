@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class TableOrderDesign extends Model
 {
@@ -12,7 +13,7 @@ class TableOrderDesign extends Model
 
     protected $table = 'tableorderdesign';
     protected $primaryKey = 'id_orderdesign';
-    
+
     protected $fillable = [
         'id_user',
         'nama',
@@ -34,5 +35,11 @@ class TableOrderDesign extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    // Accessor for file_name to get the correct URL
+    public function getFileNameAttribute($value)
+    {
+        return Storage::url($value);
     }
 }
