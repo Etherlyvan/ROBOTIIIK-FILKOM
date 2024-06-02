@@ -38,7 +38,7 @@ class LoginController extends Controller
 
             // Redirect pengguna ke halaman yang diinginkan (default ke '/')
             if (Auth::user()->is_admin) {
-                return redirect()->route('admin');
+                return redirect()->route('admin.index');
             } else {
                 return redirect()->route('dashboard');
             }

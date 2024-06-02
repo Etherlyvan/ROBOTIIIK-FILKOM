@@ -10,9 +10,8 @@ class RedirectAdminFromDashboard
 {
     public function handle(Request $request, Closure $next)
     {
-        // Periksa apakah pengguna adalah admin
         if (Auth::check() && Auth::user()->is_admin) {
-            return redirect()->route('admin');
+            return redirect()->route('admin.index'); // Mengarahkan ke rute admin.index
         }
 
         return $next($request);

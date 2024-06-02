@@ -5,68 +5,37 @@
 @endsection
 
 @section('isiInformasi3DPrinting')
-<form id="selectionForm">
-    <label>
-        <input type="radio" name="pilihan" value="design">
-        DESIGN
-    </label>
-    <label>
-        <input type="radio" name="pilihan" value="print">
-        PRINT
-    </label>
-    <input type="text" id="searchInput" placeholder="Search...">
-    <button type="button" onclick="search()">Search</button>
-</form>
 
+<form method="GET" action="{{ route('search') }}">
+    <input type="text" name="search" placeholder="Cari Nama atau Kontak" value="{{ request()->get('search') }}">
+    <button type="submit">Cari</button>
+</form>
 
 <table border="1">
     <tbody>
-        @if(isset($tableorderdesign))
+        @if(isset($tableorderprint))
             <thead>
                 <tr>
                     <th>
-                        <a href="{{ request()->fullUrlWithQuery(['order' => ($order == 'asc') ? 'desc' : 'asc']) }}">
+                        <a
+                            href="{{ request()->fullUrlWithQuery(['date_order' => ($dateOrder ?? 'asc') == 'asc' && $statusOrder !== 'desc' ? 'desc' : 'asc', 'status_order' => $statusOrder]) }}">
                             Tanggal Pesan
                         </a>
-                    </th>
-                    <th>Jam</th>
-                    <th>Nama</th>
-                    <th>Kontak</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            @foreach($tableorderdesign as $od)
-                <tr>
-                    <td>{{ $od->tanggal_pesan }}</td>
-                    <td>{{ $od->jam_pesan }}</td>
-                    <td>{{ $od->nama }}</td>
-                    <td>{{ $od->kontak }}</td>
-                    <td>
-                        <select name="status" onchange="updateStatus('{{ $od->id_orderdesign }}', this.value, 'design')">
-                            <option value="{{ $od->status }}" selected>{{ $od->status }}</option>
-                            <option value="Done" {{ $od->status == 'Done' ? 'selected' : '' }}>Done</option>
-                            <option value="Ditolak" {{ $od->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
-                            <option value="DPLunas" {{ $od->status == 'DPLunas' ? 'selected' : '' }}>DPLunas</option>
-                            <option value="Proses" {{ $od->status == 'Proses' ? 'selected' : '' }}>Proses</option>
-                        </select>
-                    </td>
-                </tr>
-            @endforeach
-        @elseif(isset($tableorderprint))
-            <thead>
-                <tr>
-                    <th>
-                        <a href="{{ request()->fullUrlWithQuery(['order' => ($order == 'asc') ? 'desc' : 'asc']) }}">
-                            Tanggal Pesan
-                        </a>
+
                     </th>
                     <th>Jam</th>
                     <th>Nama</th>
                     <th>Material</th>
                     <th>Kontak</th>
-                    <th>Status</th>
+                    <th>
+                        <a
+                            href="{{ request()->fullUrlWithQuery(['status_order' => ($statusOrder == 'asc') ? 'desc' : 'asc', 'date_order' => $dateOrder ?? null]) }}">
+                            Status
+                        </a>
+                    </th>
                 </tr>
             </thead>
+
             @foreach($tableorderprint as $op)
                 <tr>
                     <td>{{ $op->tanggal_pesan }}</td>
@@ -121,7 +90,7 @@
                         @csrf
                         <div>
                             <h4>Harga</h4>
-                            <input type="text" name="harga">
+                            <input type="text" name="harga" required>
                         </div>
                         <div class="downloadFile">
                             <a href="{{ asset($op->file_name) }}" download>{{ $op->file_name }}</a>
@@ -185,19 +154,6 @@
 </table>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('input[name="pilihan"]').forEach((elem) => {
-            elem.addEventListener("change", function (event) {
-                let value = event.target.value;
-                if (value === 'design') {
-                    window.location.href = "/tampilkanorderdesign/ambildatatabeldesign";
-                } else if (value === 'print') {
-                    window.location.href = "/tampilkanorderprint/ambildatatabelprint";
-                }
-            });
-        });
-    });
-
     function showPopup(id) {
         var popup = document.getElementById(id);
         popup.style.display = "block";
@@ -207,6 +163,5 @@
         var popup = document.getElementById(id);
         popup.style.display = "none";
     }
-
 </script>
 @endsection

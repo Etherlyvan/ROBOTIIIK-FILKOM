@@ -60,8 +60,4 @@ class User extends Authenticatable
     /**
      * Get the table order designs for the user.
      */
-    public function orderDesigns()
-    {
-        return $this->hasMany(TableOrderDesign::class, 'id_user');
-    }
 }

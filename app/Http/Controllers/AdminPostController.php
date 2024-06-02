@@ -2,40 +2,99 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-
-use App\Models\TableOrderDesign;
 use App\Models\TableOrderPrint;
+use Illuminate\Http\Request;
 
+namespace App\Http\Controllers;
+
+use App\Models\TableOrderPrint;
 use Illuminate\Http\Request;
 
 class AdminPostController extends Controller
 {
-    public function ambildatatabeldesign(Request $request)
+    public function index(Request $request)
     {
-        $order = $request->get('order', 'desc');
-        $tableorderdesign = TableOrderDesign::orderBy('tanggal_pesan', $order)
-            ->orderBy('jam_pesan', $order)
-            ->get();
-        $title = 'Design Orders';
-        $defaultStatus = TableOrderDesign::first()->status;
-        return view('admin.index', compact('tableorderdesign', 'title', 'order', 'defaultStatus'));
+        $dateOrder = $request->get('date_order', 'desc');
+        $statusOrder = $request->get('status_order', 'asc'); // Urutan status berdasarkan ascending
+
+        $tableorderprintQuery = TableOrderPrint::query();
+
+        // Menambahkan pengurutan berdasarkan tanggal jika diinginkan
+        if ($dateOrder && $statusOrder !== 'desc') {
+            $tableorderprintQuery->orderBy('tanggal_pesan', $dateOrder);
+        }
+
+        // Menambahkan pengurutan berdasarkan status jika diinginkan
+        if ($statusOrder) {
+            $customOrder = [
+                'waiting',
+                'payment',
+                'checking',
+                'processing',
+                'ready to take',
+                'done'
+            ];
+
+            $tableorderprintQuery->orderByRaw("FIELD(status, '" . implode("','", $customOrder) . "') $statusOrder");
+        }
+
+        // Jika urutan status descending, pastikan tanggal tidak dipertimbangkan dalam pengurutan
+        if ($statusOrder === 'desc') {
+            $tableorderprintQuery->orderBy('status', $statusOrder);
+        }
+
+        $tableorderprint = $tableorderprintQuery->get();
+
+        $title = 'Print Orders';
+        return view('admin.index', compact('tableorderprint', 'title', 'dateOrder', 'statusOrder'));
     }
 
-    public function ambildatatabelprint(Request $request)
+
+    public function search(Request $request)
     {
-        $order = $request->get('order', 'desc');
-        $tableorderprint = TableOrderPrint::orderBy('tanggal_pesan', $order)
-            ->orderBy('jam_pesan', $order)
-            ->get();
+        $search = $request->input('search');
+        $dateOrder = $request->get('date_order', 'desc');
+        $statusOrder = $request->get('status_order', 'asc');
+
+        $tableorderprintQuery = TableOrderPrint::query();
+
+        // Menambahkan filter pencarian jika ada
+        if ($search) {
+            $tableorderprintQuery->where('nama', 'like', "%{$search}%")
+                ->orWhere('kontak', 'like', "%{$search}%");
+        }
+
+        // Menambahkan pengurutan berdasarkan tanggal jika diinginkan
+        if ($dateOrder && $statusOrder !== 'desc') {
+            $tableorderprintQuery->orderBy('tanggal_pesan', $dateOrder);
+        }
+
+        // Menambahkan pengurutan berdasarkan status jika diinginkan
+        if ($statusOrder) {
+            $customOrder = [
+                'waiting',
+                'payment',
+                'checking',
+                'processing',
+                'ready to take',
+                'done'
+            ];
+
+            $tableorderprintQuery->orderByRaw("FIELD(status, '" . implode("','", $customOrder) . "') $statusOrder");
+        }
+
+        // Jika urutan status descending, pastikan tanggal tidak dipertimbangkan dalam pengurutan
+        if ($statusOrder === 'desc') {
+            $tableorderprintQuery->orderBy('status', $statusOrder);
+        }
+
+        $tableorderprint = $tableorderprintQuery->get();
+
         $title = 'Print Orders';
-        $defaultStatus = TableOrderPrint::first()->status;
-        return view('admin.index', compact('tableorderprint', 'title', 'order', 'defaultStatus'));
+        return view('admin.index', compact('tableorderprint', 'title', 'dateOrder', 'statusOrder', 'search'));
     }
-    public function updateDesignStatus(Request $request, $id_orderdesign)
-    {
-        return $this->updateStatus($request, $id_orderdesign, TableOrderDesign::class);
-    }
+
+
 
     public function updatePrintStatus(Request $request, $id_orderprint)
     {
@@ -61,21 +120,17 @@ class AdminPostController extends Controller
     }
     public function acceptPrintAdmin(Request $request, $id)
     {
-        // Validate the request
         $request->validate([
             'harga' => 'required|integer',
         ]);
 
-        // Ambil nilai harga dari input form
         $harga = $request->input('harga');
 
-        // Perbarui model TableOrderPrint dengan harga dan status yang baru
         $order = TableOrderPrint::find($id);
         $order->harga = $harga;
-        $order->status = 'payment'; // Ubah status menjadi "payment"
+        $order->status = 'payment';
         $order->save();
 
-        // Redirect kembali ke halaman pesanan admin
         return redirect()->back()->with('success', 'Order confirmed successfully.');
     }
     public function acceptPaymentAdmin(Request $request, $id)

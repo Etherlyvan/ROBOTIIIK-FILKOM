@@ -16,10 +16,6 @@
                     @csrf
                     <button class="button1" style="background: none; border: none;">Send Design</button>
                 </form>
-                <form action="/DashBoard/GetDesign" method="post">
-                    @csrf
-                    <button class="button2" style="background: none; border: none;">Get Design</button>
-                </form>
             </div>
         </div>
         <img src="/img/AlatPrinting3D.svg" alt="AlatPrinting3D">
@@ -114,28 +110,4 @@
     </form>
 @endauth
 
-@auth
-    <form action="orderdesign" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="senddesign">
-            <h1>Request Design</h1>
-            <div>
-                <h3>Kontak (WhatsApp/ Email)</h3>
-                <input type="text" name="kontak" required>
-            </div>
-            <div>
-                <h3>Nama</h3>
-                <input type="text" name="nama" required>
-            </div>
-            <div>
-                <h3>Jelaskan desain yang akan di print</h3>
-                <input type="text" name="penjelasan" required>
-            </div>
-            <div>
-                <input type="file" name="file_name" required>
-            </div>
-            <button onclick="submit">Submit</button>
-        </div>
-    </form>
-@endauth
 @endsection

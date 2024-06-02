@@ -11,7 +11,6 @@ class Admin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if there is an authenticated user
         $user = Auth::guard('web')->user();
 
         if ($user && $user->is_admin) {

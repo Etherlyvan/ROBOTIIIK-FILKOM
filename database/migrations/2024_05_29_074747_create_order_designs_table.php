@@ -25,29 +25,10 @@ return new class extends Migration
             $table->string('harga')->default('0');
             $table->timestamps();
         });
-
-        Schema::create('tableorderdesign', function (Blueprint $table) {
-            $table->id('id_orderdesign');
-            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
-            $table->string('nama');
-            $table->string('kontak');
-            $table->text('penjelasan');
-            $table->string('file_name');
-            $table->string('status')->default('waiting');
-            $table->date('tanggal_pesan');
-            $table->time('jam_pesan');
-            $table->string('file_resi')->nullable(); // Hapus klausa after
-            $table->string('harga')->default('0');
-            $table->timestamps();
-        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tableorderprint');
-        Schema::dropIfExists('tableorderdesign');
     }
 };
