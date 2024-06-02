@@ -136,7 +136,7 @@
                         </div>
                         <div class="downloadFile">
                             <a href="{{ asset($op->file_name) }}" download>{{ $op->file_name }}</a>
-                            <a href="{{ asset($op->file_resi) }}" download>{{ $op->file_resi }}</a>
+                            <a href="{{ Storage::url($op->file_resi) }}" download>{{ $op->file_resi }}</a>
                         </div>
                         <div>
                             <button type="submit">Accept</button>

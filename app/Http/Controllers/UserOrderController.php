@@ -29,7 +29,7 @@ class UserOrderController extends Controller
 
         // Simpan file resi dengan nama asli
         $fileResi = $request->file('file_resi')->getClientOriginalName();
-        $fileResiPath = $request->file('file_resi')->storeAs('/fileresi3dprinting', $fileResi);
+        $fileResiPath = $request->file('file_resi')->storeAs('public/fileresi3dprinting', $fileResi);
 
         // Panggil metode updateStatus untuk memperbarui status dan menyimpan nama file resi
         $this->updateStatus($id, 'checking', $fileResiPath, TableOrderPrint::class);
@@ -37,6 +37,7 @@ class UserOrderController extends Controller
         // Redirect kembali ke halaman pesanan pengguna
         return redirect()->back()->with('success', 'Receipt uploaded successfully.');
     }
+
 
 
 
